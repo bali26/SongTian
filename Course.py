@@ -1,5 +1,7 @@
 #CourseDict = {} #CourseDich = dict()  dict(key = 'cold')
 #CourseDict = ''  {'key:' 'a'}
+import StrUtil
+
 CourseList = []
 
 
@@ -25,13 +27,20 @@ class Course:
         self.tname = tname
     def setPname(self,pname):
         self.cname = pname
-
+    def gerForBWeek(self):
+        return StrUtil.getForBweek(self.getTime())
+    def getForSWeek(self):
+        return StrUtil.loadSweek(self.getTime())
+    def getForSection(self):
+        return StrUtil.loadSection(self.getTime())
     def __init__(self,cname,time,tname,pname):
         self.cname = cname
         self.time = time
         self.tname = tname
         self.pname = pname
         CourseList.append(self)
+
+
 
 def getCourseLists():
    return CourseList
@@ -40,3 +49,8 @@ def getCourse(name):
     for i in CourseList:
         if(CourseList[i] == name):
             return CourseList[i]
+
+
+
+
+

@@ -6,6 +6,8 @@ import requests
 from PIL import Image
 from bs4 import BeautifulSoup
 from lxml import etree
+
+import ListUtil
 from Course import Course
 import StrUtil
 user = 0
@@ -107,7 +109,7 @@ res = list(set(res))
 res.remove("&nbsp;")
 res.remove("晚上")
 res.remove("下午")
-for i in range(0,1):
+for i in range(0,len(res)):
     #print(str(res[i]))
     w = str(res[i]).split("<br>")
     cname = w[0]
@@ -120,7 +122,18 @@ for i in range(0,1):
     print("老师:" + tname)
     print("地点:" + pname)
     c = Course(cname,time,tname,pname)
-
-
-
     StrUtil.loadBweek(c.getTime())
+    print(StrUtil.loadSweek(c.getTime()))
+    print(StrUtil.loadSection(c.getTime()))
+    ListUtil.addCourse(c)
+
+Bweek = input("请输入大周:")
+Sweek = input("请输入小周:")
+Section = input("请输入节数:")
+c = ListUtil.getCourse(Bweek,Sweek,Section)
+
+
+print(c.getCname())
+print(c.getTname())
+print(c.getPname())
+print(c.getTime())
