@@ -3,6 +3,7 @@ import re
 
 
 def loadSweek(time):  # 时间:周五第3,4节{第7-12周}
+
     return {
         '周一': 1,
         '周二': 2,
@@ -40,22 +41,25 @@ def loadBweek(time):  # 正则 #5-19
 def getForBweek(s):
     ss = str(loadBweek(s)[0]).split("-")
     list = []
-    print("ss[0]:" + ss[0])
-    print("ss[1]:" + ss[1])
+    #print("ss[0]:" + ss[0])
+    #print("ss[1]:" + ss[1])
     if int(ss[0]) == int(ss[1]):
-        print("ss相等 返回" + ss[0])
-        return range(int(ss[0]))
+        #print("ss相等 返回" + ss[0])
+        return range(int(ss[0]), int(ss[0]) + 1)
     else:
-        for i in range(int(ss[0]), int(ss[1])):
+        for i in range(int(ss[0]), int(ss[1]) + 1):
             list.append(i)
-            return list;
+            #print("打印大周:" + str(i));
+        return list;
+
 
 def object2dict(obj):
     return pickle.dumps(obj);
 
+
 def dict2object(d):
-    #new_obj = pickle.loads(d)
-    #new_obj.dump()
+    # new_obj = pickle.loads(d)
+    # new_obj.dump()
 
     return pickle.loads(d)
 #

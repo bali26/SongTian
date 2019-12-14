@@ -10,6 +10,13 @@ class Course:
     time = ''
     tname = ''
     pname = ''
+    def getIntTime(self,Sweek): #return list
+        j = []
+        for i in self.gerForBWeek():
+            for k in self.getForSection():
+
+                j.append((str(i)+str(Sweek)+str(k)))
+        print("INT数据：" + str(j))
     def getCname(self):
         return self.cname
     def getTime(self):
@@ -47,10 +54,6 @@ def getCourseLists():
 
 def getCourse(name):
     for i in CourseList:
+
         if(CourseList[i] == name):
             return CourseList[i]
-
-
-
-
-

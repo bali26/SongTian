@@ -1,24 +1,53 @@
+import sys
 import os
 import re
 import urllib.parse
-
 import requests
 from PIL import Image
 from bs4 import BeautifulSoup
 from lxml import etree
-
 import ListUtil
-from Course import Course
 import StrUtil
+#from PyQt5.QtWidgets import QApplication, QWidget
+from Course import Course
+
+
 user = 0
 url = "http://192.168.170.253/Default2.aspx"
+#url = "http://jwxt.sontan.net"
 S = requests.session()
 header_code = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36",
     "Referer": "http://192.168.170.253/",
+    #"Referer": "http://jwxt.sontan.net",
     "Host": "192.168.170.253",
+    #"Host": "http://jwxt.sontan.net",
     "Cache-Control": "max-age=0"
 }
+
+def addcour(res):
+    split_res = res.split('<br><br>')
+    for i in range(0,len(split_res)):
+        line = split_res[i]
+        if(str(line).startswith('<font')):
+            continue
+        else:
+            addc(line)
+def addc(w):
+    w = w.split("<br>")
+    cname = w[0]
+    time = w[1]
+    tname = w[2]
+    pname = w[3]
+    print("2课名:" + cname)
+    print("2时间:" + time)
+    print("2老师:" + tname)
+    print("2地点:" + pname)
+    c = Course(cname, time, tname, pname)
+    StrUtil.loadBweek(c.getTime())
+    print(StrUtil.loadSweek(c.getTime()))
+    print(StrUtil.loadSection(c.getTime()))
+    ListUtil.addCourse(c)
 
 
 def get_post_data(url):
@@ -30,6 +59,7 @@ def get_post_data(url):
     user = 1908010101
     pwd = "bali1626"
     URL_CODE = "http://192.168.170.253/CheckCode.aspx"  # 验证码地址
+    #URL_CODE = "http://jwxt.sontan.net/CheckCode.aspx"  # 验证码地址
     code = S.get(URL_CODE, headers=header_code)
 
     with open("code.gif", "wb") as f:
@@ -60,7 +90,6 @@ def get_post_data(url):
 
 
 response = S.post(url, data=get_post_data(url), headers=header_code)
-
 
 def getInfor(response, xpath):
     content = response.content.decode('gb2312')  # 网页源码是gb2312要先解码
@@ -110,30 +139,50 @@ res.remove("&nbsp;")
 res.remove("晚上")
 res.remove("下午")
 for i in range(0,len(res)):
-    #print(str(res[i]))
-    w = str(res[i]).split("<br>")
-    cname = w[0]
-    time = w[1]
-    tname = w[2]
-    pname = w[3]
 
-    print("课名:" + cname)
-    print("时间:" + time)
-    print("老师:" + tname)
-    print("地点:" + pname)
-    c = Course(cname,time,tname,pname)
-    StrUtil.loadBweek(c.getTime())
-    print(StrUtil.loadSweek(c.getTime()))
-    print(StrUtil.loadSection(c.getTime()))
-    ListUtil.addCourse(c)
-
-Bweek = input("请输入大周:")
-Sweek = input("请输入小周:")
-Section = input("请输入节数:")
-c = ListUtil.getCourse(Bweek,Sweek,Section)
+    print("test2:" +(res[i]))
+    #w = str(res[i]).split("<br>")
+    addcour(res[i])
+#ListUtil.printBweek2()
 
 
-print(c.getCname())
-print(c.getTname())
-print(c.getPname())
-print(c.getTime())
+
+
+#ListUtil.printBweek3(Bweek)
+
+#c.getIntTime(Sweek)
+
+
+
+class Example(QWidget): #extend QWidget
+    def __init__(self): #父类构造器
+        super().__init__() #父级
+        self.initUI()
+
+    def initUI(self): #本类构造器
+
+        Bweek = input("请输入大周:")
+        Sweek = input("请输入小周:")
+        Section = input("请输入节数:")
+        c = ListUtil.getCourse(Bweek, Sweek, Section)
+
+        print(c.getCname())
+        print(c.getTname())
+        print(c.getPname())
+        print(c.getTime())
+        grid = ListUtil.initLabel(Bweek)
+        #grid = QGridLayout()
+        self.setLayout(grid)
+        self.move(300,150)
+        self.setWindowTitle("松田课表")
+        self.show()
+
+
+
+app = QApplication(sys.argv)
+ex = Example()
+sys.exit(app.exec_())
+
+
+
+
